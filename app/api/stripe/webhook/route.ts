@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-// Disable body parsing — Stripe needs the raw body for signature verification
-export const config = { api: { bodyParser: false } };
+// Use Node.js runtime — Stripe needs the raw body for signature verification
+export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
