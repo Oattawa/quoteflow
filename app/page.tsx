@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ProductDemo from "./_components/ProductDemo";
 import {
   FileText,
   Zap,
@@ -192,6 +193,13 @@ export default function Home() {
               {feat}
             </span>
           ))}
+        </div>
+      </section>
+
+      {/* Interactive product demo */}
+      <section className="px-6 pb-20">
+        <div className="max-w-4xl mx-auto">
+          <ProductDemo />
         </div>
       </section>
 
