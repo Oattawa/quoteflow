@@ -59,5 +59,23 @@ export async function POST(req: NextRequest) {
       .eq("stripe_subscription_id", subscription.id);
   }
 
+  // Revert to free if a renewal payment fails after retries are exhausted
+  if (event.type === "customer.subscription.updated") {
+    const subscription = event.data.object;
+    if (subscription.status === "past_due" || subscription.status === "unpaid") {
+      await supabase
+        .from("subscriptions")
+        .update({ plan: "free" })
+        .eq("stripe_subscription_id", subscription.id);
+    }
+    // Restore pro if payment recovers (e.g. user updates card)
+    if (subscription.status === "active") {
+      await supabase
+        .from("subscriptions")
+        .update({ plan: "pro" })
+        .eq("stripe_subscription_id", subscription.id);
+    }
+  }
+
   return NextResponse.json({ received: true });
 }
