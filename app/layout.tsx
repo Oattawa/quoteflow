@@ -27,9 +27,13 @@ export const metadata: Metadata = {
   keywords: [
     "freelance proposal generator",
     "AI proposal writer",
-    "proposal template",
-    "freelancer tools",
+    "proposal template for freelancers",
+    "freelance quote generator",
     "client proposal software",
+    "how to write a freelance proposal",
+    "proposal writer AI",
+    "business proposal generator",
+    "freelancer tools",
   ],
   authors: [{ name: "QuoteFlow" }],
   creator: "QuoteFlow",
@@ -41,12 +45,14 @@ export const metadata: Metadata = {
     title: "QuoteFlow — AI Proposal Generator for Freelancers",
     description:
       "Write winning freelance proposals in 60 seconds with AI. Free to start.",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "QuoteFlow — AI Proposal Generator for Freelancers" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "QuoteFlow — AI Proposal Generator for Freelancers",
     description:
       "Write winning freelance proposals in 60 seconds with AI. Free to start.",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
