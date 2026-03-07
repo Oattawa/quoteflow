@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FileText, LogOut } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
+import { FileText, LogOut, LayoutList, PlusCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function DashboardNav({ email }: { email: string }) {
   const router = useRouter();
+  const pathname = usePathname();
 
   async function handleLogout() {
     const supabase = createClient();
@@ -25,8 +26,30 @@ export default function DashboardNav({ email }: { email: string }) {
           <span className="text-base font-bold text-gray-900">QuoteFlow</span>
         </Link>
 
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500 hidden sm:block truncate max-w-[200px]">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <Link
+            href="/dashboard/proposals"
+            className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${
+              pathname?.startsWith("/dashboard/proposals")
+                ? "text-violet-700 bg-violet-50"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            <LayoutList className="w-4 h-4" />
+            <span className="hidden sm:inline">My Proposals</span>
+          </Link>
+          <Link
+            href="/dashboard/new-proposal"
+            className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors ${
+              pathname === "/dashboard/new-proposal"
+                ? "text-violet-700 bg-violet-50"
+                : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+            }`}
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span className="hidden sm:inline">New</span>
+          </Link>
+          <span className="text-sm text-gray-400 hidden md:block truncate max-w-[160px] px-2">
             {email}
           </span>
           <button
@@ -34,7 +57,7 @@ export default function DashboardNav({ email }: { email: string }) {
             className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
           >
             <LogOut className="w-4 h-4" />
-            Sign out
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
       </div>
