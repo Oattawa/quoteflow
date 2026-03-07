@@ -1,17 +1,15 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export async function getUserPlan(
-  supabase: SupabaseClient
-): Promise<"free" | "pro"> {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return "free";
+export const FREE_TIER_LIMIT = 3;
 
+export async function getUserPlan(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<"free" | "pro"> {
   const { data } = await supabase
     .from("subscriptions")
     .select("plan")
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
 
   return (data?.plan as "free" | "pro") ?? "free";
@@ -67,12 +65,14 @@ export async function saveProposal(
 export async function updateProposal(
   supabase: SupabaseClient,
   proposalId: string,
+  userId: string,
   proposalContent: string
 ): Promise<void> {
   const { error } = await supabase
     .from("proposals")
     .update({ proposal_content: proposalContent })
-    .eq("id", proposalId);
+    .eq("id", proposalId)
+    .eq("user_id", userId);
 
   if (error) throw new Error("Failed to update proposal.");
 }

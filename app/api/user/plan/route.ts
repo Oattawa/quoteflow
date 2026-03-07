@@ -3,9 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import {
   getUserPlan,
   getProposalCountThisMonth,
+  FREE_TIER_LIMIT,
 } from "@/lib/supabase/proposals";
-
-const FREE_TIER_LIMIT = 3;
 
 export async function GET() {
   const supabase = createClient();
@@ -18,7 +17,7 @@ export async function GET() {
   }
 
   const [plan, usedThisMonth] = await Promise.all([
-    getUserPlan(supabase),
+    getUserPlan(supabase, user.id),
     getProposalCountThisMonth(supabase, user.id),
   ]);
 

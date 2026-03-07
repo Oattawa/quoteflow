@@ -7,6 +7,7 @@ import {
   getProposalCountThisMonth,
   saveProposal,
   updateProposal,
+  FREE_TIER_LIMIT,
 } from "@/lib/supabase/proposals";
 
 const FIELD_LIMITS = {
@@ -17,8 +18,6 @@ const FIELD_LIMITS = {
   budgetRange: 50,
   scope: 2000,
 };
-
-const FREE_TIER_LIMIT = 3;
 
 export async function POST(req: NextRequest) {
   // ── Rate limiting ──────────────────────────────────────────
@@ -100,7 +99,7 @@ export async function POST(req: NextRequest) {
     // ── Tier check (only for new proposals) ───────────────────
     if (!isRegeneration) {
       const [plan, usedThisMonth] = await Promise.all([
-        getUserPlan(supabase),
+        getUserPlan(supabase, user.id),
         getProposalCountThisMonth(supabase, user.id),
       ]);
 
@@ -170,7 +169,7 @@ Format it professionally. Use the client and freelancer names throughout to make
     let savedProposalId: string;
 
     if (isRegeneration && proposalId) {
-      await updateProposal(supabase, proposalId, proposal);
+      await updateProposal(supabase, proposalId, user.id, proposal);
       savedProposalId = proposalId;
     } else {
       savedProposalId = await saveProposal(
