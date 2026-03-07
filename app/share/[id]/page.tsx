@@ -80,7 +80,7 @@ export default async function SharedProposalPage({
 
         {/* Proposal content */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-8 py-8 print:border-none print:shadow-none print:p-0">
-          <ProposalRenderer content={proposal.proposal_content} />
+          <ProposalRenderer text={proposal.proposal_content} />
         </div>
 
         {/* "Powered by" footer — always visible, on print too */}
