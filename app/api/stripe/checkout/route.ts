@@ -49,6 +49,9 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const body = await req.json().catch(() => ({})) as { billing?: string };
+  const isAnnual = body.billing === "annual";
+
   const origin = req.headers.get("origin") ?? "http://localhost:3000";
 
   const session = await stripe.checkout.sessions.create({
@@ -59,9 +62,9 @@ export async function POST(req: NextRequest) {
       {
         price_data: {
           currency: "usd",
-          product: process.env.STRIPE_PRO_PRODUCT_ID!, // existing QuoteFlow Pro product
-          unit_amount: 1900, // $19.00
-          recurring: { interval: "month" },
+          product: process.env.STRIPE_PRO_PRODUCT_ID!,
+          unit_amount: isAnnual ? 14900 : 1900, // $149/yr or $19/mo
+          recurring: { interval: isAnnual ? "year" : "month" },
         },
         quantity: 1,
       },

@@ -2,6 +2,20 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 export const FREE_TIER_LIMIT = 3;
 
+export interface ProposalSummary {
+  id: string;
+  client_name: string;
+  project_type: string;
+  budget_range: string;
+  created_at: string;
+}
+
+export interface ProposalRow extends ProposalSummary {
+  scope: string;
+  timeline: string;
+  proposal_content: string;
+}
+
 export async function getUserPlan(
   supabase: SupabaseClient,
   userId: string
@@ -60,6 +74,66 @@ export async function saveProposal(
 
   if (error) throw new Error("Failed to save proposal.");
   return data.id as string;
+}
+
+export async function getProposals(
+  supabase: SupabaseClient,
+  userId: string,
+  limit = 50
+): Promise<ProposalSummary[]> {
+  const { data, error } = await supabase
+    .from("proposals")
+    .select("id, client_name, project_type, budget_range, created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw new Error("Failed to fetch proposals.");
+  return (data ?? []) as ProposalSummary[];
+}
+
+export async function getProposal(
+  supabase: SupabaseClient,
+  proposalId: string,
+  userId: string
+): Promise<ProposalRow | null> {
+  const { data } = await supabase
+    .from("proposals")
+    .select("*")
+    .eq("id", proposalId)
+    .eq("user_id", userId)
+    .single();
+
+  return (data as ProposalRow) ?? null;
+}
+
+export async function deleteProposal(
+  supabase: SupabaseClient,
+  proposalId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("proposals")
+    .delete()
+    .eq("id", proposalId)
+    .eq("user_id", userId);
+
+  if (error) throw new Error("Failed to delete proposal.");
+}
+
+// Fetches a proposal by ID with no user filter — for public share pages.
+// Security relies on the UUID being unguessable (128-bit random).
+export async function getProposalPublic(
+  adminSupabase: SupabaseClient,
+  proposalId: string
+): Promise<ProposalRow | null> {
+  const { data } = await adminSupabase
+    .from("proposals")
+    .select("*")
+    .eq("id", proposalId)
+    .single();
+
+  return (data as ProposalRow) ?? null;
 }
 
 export async function updateProposal(
