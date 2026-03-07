@@ -58,7 +58,7 @@ export default async function ProposalDetailPage({
                 <RefreshCw className="w-3.5 h-3.5" />
                 Regenerate
               </Link>
-              <ProposalActions proposal={proposal.proposal_content} isPro={isPro} />
+              <ProposalActions proposalId={proposal.id} proposal={proposal.proposal_content} isPro={isPro} />
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export default async function ProposalDetailPage({
 
           {/* Bottom actions — hidden on print */}
           <div className="flex justify-center mt-6 print:hidden">
-            <ProposalActions proposal={proposal.proposal_content} isPro={isPro} />
+            <ProposalActions proposalId={proposal.id} proposal={proposal.proposal_content} isPro={isPro} />
           </div>
 
         </div>

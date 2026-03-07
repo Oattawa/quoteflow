@@ -107,6 +107,35 @@ export async function getProposal(
   return (data as ProposalRow) ?? null;
 }
 
+export async function deleteProposal(
+  supabase: SupabaseClient,
+  proposalId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("proposals")
+    .delete()
+    .eq("id", proposalId)
+    .eq("user_id", userId);
+
+  if (error) throw new Error("Failed to delete proposal.");
+}
+
+// Fetches a proposal by ID with no user filter — for public share pages.
+// Security relies on the UUID being unguessable (128-bit random).
+export async function getProposalPublic(
+  adminSupabase: SupabaseClient,
+  proposalId: string
+): Promise<ProposalRow | null> {
+  const { data } = await adminSupabase
+    .from("proposals")
+    .select("*")
+    .eq("id", proposalId)
+    .single();
+
+  return (data as ProposalRow) ?? null;
+}
+
 export async function updateProposal(
   supabase: SupabaseClient,
   proposalId: string,
