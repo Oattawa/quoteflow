@@ -1,9 +1,54 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { FileText, Zap, CheckCircle } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "QuoteFlow — Write Winning Freelance Proposals in 60 Seconds",
+  description:
+    "AI-powered proposal generator for freelancers. Fill in your project details and get a professional, client-ready proposal instantly. Free to start.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: "QuoteFlow — Write Winning Freelance Proposals in 60 Seconds",
+    description:
+      "AI-powered proposal generator for freelancers. Get a professional proposal instantly. Free to start.",
+    url: "/",
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "QuoteFlow",
+  description:
+    "AI-powered freelance proposal generator. Write professional proposals in 60 seconds.",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: "https://quoteflow.app",
+  offers: [
+    {
+      "@type": "Offer",
+      name: "Free",
+      price: "0",
+      priceCurrency: "USD",
+      description: "3 proposals per month",
+    },
+    {
+      "@type": "Offer",
+      name: "Pro",
+      price: "19",
+      priceCurrency: "USD",
+      description: "Unlimited proposals per month",
+    },
+  ],
+};
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50 flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Navbar */}
       <nav className="w-full px-6 py-4 flex items-center justify-between max-w-6xl mx-auto">
         <div className="flex items-center gap-2">
