@@ -26,7 +26,8 @@ export const metadata: Metadata = {
   },
 };
 
-const jsonLd = {
+// Schema 1 — SoftwareApplication with pricing
+const schemaApp = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "QuoteFlow",
@@ -41,16 +42,82 @@ const jsonLd = {
       name: "Free",
       price: "0",
       priceCurrency: "USD",
-      description: "3 proposals per month",
+      description: "3 AI-generated proposals per month, copy to clipboard",
     },
     {
       "@type": "Offer",
       name: "Pro",
       price: "19",
       priceCurrency: "USD",
-      description: "Unlimited proposals per month",
+      description: "Unlimited proposals, full library, PDF export, priority support",
     },
   ],
+};
+
+// Schema 2 — FAQPage (shows in Google's People Also Ask)
+const schemaFaq = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How do I write a freelance proposal?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "With QuoteFlow, enter your client name, project type, scope, timeline, and budget. The AI generates a structured, professional proposal — including scope of work, pricing, timeline, and next steps — in under 60 seconds.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is QuoteFlow free to use?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. QuoteFlow is free to start with 3 AI-generated proposals per month, no credit card required. Pro plans are $19/month for unlimited proposals, a full proposal library, and PDF export.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What should a freelance proposal include?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "A strong freelance proposal includes a personalised introduction, clear scope of work, estimated timeline, pricing, your relevant experience, and specific next steps. QuoteFlow's AI automatically structures all of these based on your project details.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I export my proposal as a PDF?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. QuoteFlow Pro users can download any proposal as a clean, print-ready PDF to send directly to clients.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How is QuoteFlow different from proposal templates?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Unlike static templates, QuoteFlow uses AI to write a unique proposal tailored to your specific client, project type, scope, and budget — not generic fill-in-the-blank text. Every proposal is different.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How long does it take to generate a proposal?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Most proposals are ready in under 60 seconds. Fill in your project details (about 30 seconds), click Generate, and QuoteFlow delivers a complete, professional proposal instantly.",
+      },
+    },
+  ],
+};
+
+// Schema 3 — WebSite for sitelinks
+const schemaWebsite = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "QuoteFlow",
+  url: "https://quoteflow.app",
+  description:
+    "AI-powered freelance proposal generator. Write professional proposals in 60 seconds.",
 };
 
 const HOW_IT_WORKS = [
@@ -123,10 +190,9 @@ const PRO_FEATURES = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-violet-50 via-white to-purple-50 flex flex-col">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaApp) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaFaq) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaWebsite) }} />
 
       {/* Navbar */}
       <nav className="w-full px-6 py-4 flex items-center justify-between max-w-6xl mx-auto">
@@ -322,6 +388,28 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-violet-600 uppercase tracking-wide mb-2">
+              FAQ
+            </p>
+            <h2 className="text-3xl font-bold text-gray-900">
+              Common questions about QuoteFlow
+            </h2>
+          </div>
+          <dl className="space-y-6">
+            {schemaFaq.mainEntity.map((item) => (
+              <div key={item.name} className="border border-gray-100 rounded-2xl px-6 py-5 bg-gray-50">
+                <dt className="text-base font-semibold text-gray-900 mb-2">{item.name}</dt>
+                <dd className="text-sm text-gray-500 leading-relaxed">{item.acceptedAnswer.text}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </section>
 
