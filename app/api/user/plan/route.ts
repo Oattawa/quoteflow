@@ -5,7 +5,7 @@ import {
   getProposalCountThisMonth,
 } from "@/lib/supabase/proposals";
 
-export const FREE_TIER_LIMIT = 3;
+const FREE_TIER_LIMIT = 3;
 
 export async function GET() {
   const supabase = createClient();
