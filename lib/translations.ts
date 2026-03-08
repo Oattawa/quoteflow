@@ -173,6 +173,44 @@ const translations = {
     },
     // Footer
     footer: "All rights reserved.",
+    // AI Assistant
+    assistant: {
+      title: "AI Assistant",
+      greeting: "Hi! I'm your QuoteFlow assistant. Ask me anything about proposals, the platform, or freelancing tips.",
+      placeholder: "Ask me anything…",
+      send: "Send",
+      thinking: "Thinking…",
+      clearChat: "Clear",
+      suggestedLabel: "Try asking:",
+      errorFallback: "Sorry, something went wrong. Please try again.",
+      suggestions: {
+        dashboard: [
+          "How do I get started?",
+          "What's in the Pro plan?",
+          "How to write a great proposal?",
+        ],
+        "new-proposal": [
+          "What should I write in the scope?",
+          "How do I set the right budget?",
+          "Tips for a winning proposal",
+        ],
+        proposals: [
+          "How do I improve my win rate?",
+          "When should I follow up?",
+          "What makes a great proposal?",
+        ],
+        "proposal-detail": [
+          "How can I improve this proposal?",
+          "How do I share with my client?",
+          "Should I follow up today?",
+        ],
+        upgrade: [
+          "Is Pro worth it?",
+          "What's included in Pro?",
+          "Can I cancel anytime?",
+        ],
+      },
+    },
     // Dashboard
     dashboard: {
       title: "Dashboard",
@@ -395,6 +433,44 @@ const translations = {
     },
     // Footer
     footer: "สงวนลิขสิทธิ์",
+    // AI Assistant
+    assistant: {
+      title: "ผู้ช่วย AI",
+      greeting: "สวัสดี! ฉันคือผู้ช่วย QuoteFlow ถามอะไรเกี่ยวกับข้อเสนอ แพลตฟอร์ม หรือเคล็ดลับฟรีแลนซ์ได้เลย",
+      placeholder: "ถามอะไรก็ได้…",
+      send: "ส่ง",
+      thinking: "กำลังคิด…",
+      clearChat: "ล้าง",
+      suggestedLabel: "ลองถามว่า:",
+      errorFallback: "ขอโทษ มีปัญหาเกิดขึ้น กรุณาลองใหม่",
+      suggestions: {
+        dashboard: [
+          "เริ่มต้นอย่างไร?",
+          "แผน Pro มีอะไรบ้าง?",
+          "เขียนข้อเสนอที่ดีอย่างไร?",
+        ],
+        "new-proposal": [
+          "ควรเขียนอะไรในช่อง Scope?",
+          "จะกำหนดงบประมาณที่เหมาะสมได้อย่างไร?",
+          "เคล็ดลับข้อเสนอที่ชนะใจ",
+        ],
+        proposals: [
+          "จะเพิ่มอัตราการชนะงานได้อย่างไร?",
+          "ควรติดตามผลเมื่อไร?",
+          "อะไรทำให้ข้อเสนอดีเลิศ?",
+        ],
+        "proposal-detail": [
+          "จะปรับปรุงข้อเสนอนี้ได้อย่างไร?",
+          "แชร์ให้ลูกค้าได้อย่างไร?",
+          "ควรติดตามผลวันนี้ไหม?",
+        ],
+        upgrade: [
+          "Pro คุ้มค่าไหม?",
+          "Pro มีอะไรบ้าง?",
+          "ยกเลิกได้ตลอดเวลาไหม?",
+        ],
+      },
+    },
     // Dashboard
     dashboard: {
       title: "แดชบอร์ด",

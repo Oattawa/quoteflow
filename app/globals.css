@@ -26,6 +26,20 @@ body {
   }
 }
 
+/* ── AI Assistant animations ─────────────────────────────────────── */
+
+@keyframes bounceOnce {
+  0%, 100% { transform: translateY(0); }
+  20%      { transform: translateY(-10px); }
+  40%      { transform: translateY(0); }
+  60%      { transform: translateY(-6px); }
+  80%      { transform: translateY(0); }
+}
+
+.animate-bounce-once {
+  animation: bounceOnce 1s ease 0.3s 1;
+}
+
 /* ── Landing page animations ─────────────────────────────────────── */
 
 @keyframes wordIn {
