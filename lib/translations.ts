@@ -206,10 +206,10 @@ const translations = {
     prices: {
       symbol: "$",
       free: "0",
-      proMonthly: "19",
-      proAnnualPerMonth: "12.40",
-      proAnnualTotal: "149",
-      proAnnualSavings: "$79",
+      proMonthly: "3.99",
+      proAnnualPerMonth: "2.59",
+      proAnnualTotal: "31.99",
+      proAnnualSavings: "$16",
       business: "39",
       billedMonthly: "Billed monthly",
       billedAnnually: (total: string, savings: string) =>
@@ -508,14 +508,14 @@ const translations = {
         "การสนับสนุนแบบ Priority",
       ],
     },
-    // Prices (THB — ≈35 THB/USD, rounded to clean SaaS numbers)
+    // Prices (THB — $3.99 ≈ ฿149, $2.59 ≈ ฿99, $31.99 ≈ ฿1,190)
     prices: {
       symbol: "฿",
       free: "0",
-      proMonthly: "690",
-      proAnnualPerMonth: "449",
-      proAnnualTotal: "5,390",
-      proAnnualSavings: "฿2,890",
+      proMonthly: "149",
+      proAnnualPerMonth: "99",
+      proAnnualTotal: "1,190",
+      proAnnualSavings: "฿598",
       business: "1,390",
       billedMonthly: "ชำระรายเดือน",
       billedAnnually: (total: string, savings: string) =>
