@@ -5,9 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FileText, Loader2, AlertCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { LanguageToggle } from "@/app/_components/LanguageToggle";
+import { useLanguage } from "@/lib/language-context";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useLanguage();
+  const l = t.login;
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,18 +38,21 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
-      {/* Logo */}
-      <div className="flex items-center gap-2 justify-center mb-8">
+      {/* Logo + toggle */}
+      <div className="flex items-center gap-2 justify-center mb-8 relative">
         <div className="bg-violet-600 rounded-lg p-1.5">
           <FileText className="w-5 h-5 text-white" />
         </div>
         <span className="text-xl font-bold text-gray-900">QuoteFlow</span>
+        <div className="absolute right-0">
+          <LanguageToggle />
+        </div>
       </div>
 
       {/* Card */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Welcome back</h1>
-        <p className="text-sm text-gray-500 mb-6">Sign in to your account</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">{l.title}</h1>
+        <p className="text-sm text-gray-500 mb-6">{l.subtitle}</p>
 
         {error && (
           <div className="flex items-start gap-2 bg-red-50 border border-red-200 text-red-700 rounded-lg px-3 py-2.5 text-sm mb-4">
@@ -56,7 +64,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex flex-col gap-1.5">
             <label htmlFor="email" className="text-sm font-medium text-gray-700">
-              Email
+              {l.email}
             </label>
             <input
               id="email"
@@ -72,7 +80,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-1.5">
             <label htmlFor="password" className="text-sm font-medium text-gray-700">
-              Password
+              {l.password}
             </label>
             <input
               id="password"
@@ -94,19 +102,19 @@ export default function LoginPage() {
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Signing in...
+                {l.signingIn}
               </>
             ) : (
-              "Sign in"
+              l.signIn
             )}
           </button>
         </form>
       </div>
 
       <p className="text-center text-sm text-gray-500 mt-5">
-        Don&apos;t have an account?{" "}
+        {l.noAccount}{" "}
         <Link href="/signup" className="text-violet-600 font-medium hover:underline">
-          Sign up free
+          {l.signUpFree}
         </Link>
       </p>
     </div>

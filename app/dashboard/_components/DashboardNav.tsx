@@ -4,10 +4,13 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { FileText, LogOut, LayoutList, PlusCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { LanguageToggle } from "@/app/_components/LanguageToggle";
+import { useLanguage } from "@/lib/language-context";
 
 export default function DashboardNav({ email }: { email: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   async function handleLogout() {
     const supabase = createClient();
@@ -36,7 +39,7 @@ export default function DashboardNav({ email }: { email: string }) {
             }`}
           >
             <LayoutList className="w-4 h-4" />
-            <span className="hidden sm:inline">My Proposals</span>
+            <span className="hidden sm:inline">{t.nav.myProposals}</span>
           </Link>
           <Link
             href="/dashboard/new-proposal"
@@ -47,8 +50,9 @@ export default function DashboardNav({ email }: { email: string }) {
             }`}
           >
             <PlusCircle className="w-4 h-4" />
-            <span className="hidden sm:inline">New</span>
+            <span className="hidden sm:inline">{t.nav.new}</span>
           </Link>
+          <LanguageToggle />
           <span className="text-sm text-gray-400 hidden md:block truncate max-w-[160px] px-2">
             {email}
           </span>
@@ -57,7 +61,7 @@ export default function DashboardNav({ email }: { email: string }) {
             className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50"
           >
             <LogOut className="w-4 h-4" />
-            <span className="hidden sm:inline">Sign out</span>
+            <span className="hidden sm:inline">{t.nav.signOut}</span>
           </button>
         </div>
       </div>
