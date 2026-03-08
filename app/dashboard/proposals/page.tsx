@@ -6,7 +6,26 @@ import {
   getUserPlan,
   getProposals,
   FREE_TIER_LIMIT,
+  type ProposalStatus,
 } from "@/lib/supabase/proposals";
+
+function StatusBadge({ status }: { status: ProposalStatus }) {
+  if (status === "accepted") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-medium bg-green-50 text-green-700 border border-green-200 px-2 py-0.5 rounded-full">
+        ✓ Accepted
+      </span>
+    );
+  }
+  if (status === "viewed") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200 px-2 py-0.5 rounded-full">
+        👁 Viewed
+      </span>
+    );
+  }
+  return null; // don't show a badge for "pending" — keep list clean
+}
 
 export default async function ProposalsPage() {
   const supabase = createClient();
@@ -112,6 +131,7 @@ export default async function ProposalsPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 shrink-0 ml-4">
+                      <StatusBadge status={p.status ?? "pending"} />
                       <span className="text-xs text-gray-400">
                         {new Date(p.created_at).toLocaleDateString("en-US", {
                           month: "short",

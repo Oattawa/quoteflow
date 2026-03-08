@@ -178,14 +178,28 @@ const FEATURES = [
   },
 ];
 
-const FREE_FEATURES = ["3 proposals per month", "AI-powered generation", "Copy to clipboard"];
+const FREE_FEATURES = [
+  "3 proposals per month",
+  "AI-powered generation",
+  "Copy to clipboard",
+  "Public share link",
+];
 const PRO_FEATURES = [
   "Unlimited proposals",
   "Full proposal library",
   "PDF export",
+  "Client 'Accept' button on share page",
+  "View tracking (see when client opens proposal)",
   "AI-powered generation",
-  "Copy to clipboard",
   "Priority support",
+];
+const BUSINESS_FEATURES = [
+  "Everything in Pro",
+  "Custom branding on share page",
+  "Follow-up reminders",
+  "Proposal analytics",
+  "5 team seats",
+  "Dedicated support",
 ];
 
 export default function Home() {
@@ -289,7 +303,7 @@ export default function Home() {
 
       {/* Pricing */}
       <section id="pricing" className="px-6 py-20 bg-white">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <p className="text-sm font-semibold text-violet-600 uppercase tracking-wide mb-2">
               Pricing
@@ -298,20 +312,20 @@ export default function Home() {
             <p className="text-gray-500 mt-3">Start free. Upgrade when you&apos;re ready.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Free */}
             <ScrollReveal delay={0}>
-            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-8">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Free</p>
+            <div className="bg-gray-50 rounded-2xl border border-gray-200 p-7 flex flex-col h-full">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Starter</p>
               <div className="flex items-baseline gap-1 mb-1">
                 <span className="text-4xl font-bold text-gray-900">$0</span>
                 <span className="text-gray-400">/month</span>
               </div>
               <p className="text-sm text-gray-500 mb-6">Great for trying QuoteFlow</p>
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-1">
                 {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
-                    <Check className="w-4 h-4 text-gray-400 shrink-0" />
+                  <li key={f} className="flex items-start gap-3 text-sm text-gray-600">
+                    <Check className="w-4 h-4 text-gray-400 shrink-0 mt-0.5" />
                     {f}
                   </li>
                 ))}
@@ -326,10 +340,10 @@ export default function Home() {
             </ScrollReveal>
 
             {/* Pro */}
-            <ScrollReveal delay={150}>
-            <div className="bg-violet-600 rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-violet-200">
+            <ScrollReveal delay={120}>
+            <div className="bg-violet-600 rounded-2xl p-7 relative overflow-hidden shadow-lg shadow-violet-200 flex flex-col h-full">
               <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500 rounded-full blur-2xl opacity-40 -translate-y-8 translate-x-8" />
-              <div className="relative">
+              <div className="relative flex flex-col h-full">
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-xs font-semibold text-violet-200 uppercase tracking-widest">Pro</p>
                   <span className="text-xs bg-white/20 text-white font-medium px-2 py-0.5 rounded-full">
@@ -340,11 +354,11 @@ export default function Home() {
                   <span className="text-4xl font-bold text-white">$19</span>
                   <span className="text-violet-200">/month</span>
                 </div>
-                <p className="text-sm text-violet-200 mb-6">For serious freelancers</p>
-                <ul className="space-y-3 mb-8">
+                <p className="text-sm text-violet-200 mb-6">For active freelancers</p>
+                <ul className="space-y-3 mb-8 flex-1">
                   {PRO_FEATURES.map((f) => (
-                    <li key={f} className="flex items-center gap-3 text-sm text-violet-100">
-                      <Check className="w-4 h-4 text-violet-300 shrink-0" />
+                    <li key={f} className="flex items-start gap-3 text-sm text-violet-100">
+                      <Check className="w-4 h-4 text-violet-300 shrink-0 mt-0.5" />
                       {f}
                     </li>
                   ))}
@@ -357,6 +371,33 @@ export default function Home() {
                 </Link>
                 <p className="text-center text-violet-300 text-xs mt-3">Cancel anytime.</p>
               </div>
+            </div>
+            </ScrollReveal>
+
+            {/* Business */}
+            <ScrollReveal delay={240}>
+            <div className="bg-gray-900 rounded-2xl border border-gray-700 p-7 flex flex-col h-full">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Business</p>
+              <div className="flex items-baseline gap-1 mb-1">
+                <span className="text-4xl font-bold text-white">$39</span>
+                <span className="text-gray-400">/month</span>
+              </div>
+              <p className="text-sm text-gray-400 mb-6">For agencies &amp; teams</p>
+              <ul className="space-y-3 mb-8 flex-1">
+                {BUSINESS_FEATURES.map((f) => (
+                  <li key={f} className="flex items-start gap-3 text-sm text-gray-300">
+                    <Check className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/signup"
+                className="block w-full text-center py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-semibold text-sm transition-colors"
+              >
+                Contact us
+              </Link>
+              <p className="text-center text-gray-500 text-xs mt-3">Coming soon.</p>
             </div>
             </ScrollReveal>
           </div>
