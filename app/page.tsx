@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   FileText,
   Zap,
-  CheckCircle,
   PenLine,
   Sparkles,
   Send,
@@ -12,6 +11,8 @@ import {
   Clock,
   Check,
 } from "lucide-react";
+import { AnimatedHero } from "./_components/AnimatedHero";
+import { ScrollReveal } from "./_components/ScrollReveal";
 
 export const metadata: Metadata = {
   title: "QuoteFlow — Write Winning Freelance Proposals in 60 Seconds",
@@ -225,41 +226,7 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="flex flex-col items-center justify-center text-center px-6 pt-20 pb-16">
-        <div className="inline-flex items-center gap-2 bg-violet-100 text-violet-700 text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-          <Zap className="w-4 h-4" />
-          AI-powered proposals
-        </div>
-
-        <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 leading-tight max-w-3xl mb-4">
-          Write winning proposals{" "}
-          <span className="text-violet-600">in 60 seconds</span>
-        </h1>
-
-        <p className="text-lg text-gray-500 max-w-xl mb-10">
-          Fill in a few details about your project and let QuoteFlow generate a
-          professional, client-ready proposal instantly.
-        </p>
-
-        <Link
-          href="/signup"
-          className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white font-semibold text-base px-8 py-3.5 rounded-xl shadow-lg shadow-violet-200 transition-all hover:-translate-y-0.5"
-        >
-          Start for free
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-          </svg>
-        </Link>
-
-        <div className="mt-8 flex flex-wrap justify-center gap-4 text-sm text-gray-500">
-          {["No credit card required", "Free to start", "Export as PDF"].map((feat) => (
-            <span key={feat} className="flex items-center gap-1.5">
-              <CheckCircle className="w-4 h-4 text-violet-400" />
-              {feat}
-            </span>
-          ))}
-        </div>
-      </section>
+      <AnimatedHero />
 
       {/* How it works */}
       <section className="px-6 py-20 bg-white">
@@ -274,17 +241,19 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {HOW_IT_WORKS.map(({ step, icon: Icon, title, description }) => (
-              <div key={step} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-violet-50 mb-4 relative">
-                  <Icon className="w-5 h-5 text-violet-600" />
-                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-violet-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                    {step}
-                  </span>
+            {HOW_IT_WORKS.map(({ step, icon: Icon, title, description }, i) => (
+              <ScrollReveal key={step} delay={i * 120}>
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-violet-50 mb-4 relative">
+                    <Icon className="w-5 h-5 text-violet-600" />
+                    <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-violet-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                      {step}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">{title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
                 </div>
-                <h3 className="text-base font-semibold text-gray-900 mb-2">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -303,17 +272,16 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {FEATURES.map(({ icon: Icon, title, description }) => (
-              <div
-                key={title}
-                className="bg-white rounded-2xl border border-gray-100 px-6 py-5 shadow-sm"
-              >
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-violet-50 mb-4">
-                  <Icon className="w-5 h-5 text-violet-600" />
+            {FEATURES.map(({ icon: Icon, title, description }, i) => (
+              <ScrollReveal key={title} delay={i * 80}>
+                <div className="bg-white rounded-2xl border border-gray-100 px-6 py-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 h-full">
+                  <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-violet-50 mb-4">
+                    <Icon className="w-5 h-5 text-violet-600" />
+                  </div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1">{title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1">{title}</h3>
-                <p className="text-sm text-gray-500 leading-relaxed">{description}</p>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>
@@ -332,6 +300,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {/* Free */}
+            <ScrollReveal delay={0}>
             <div className="bg-gray-50 rounded-2xl border border-gray-200 p-8">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-2">Free</p>
               <div className="flex items-baseline gap-1 mb-1">
@@ -354,8 +323,10 @@ export default function Home() {
                 Get started free
               </Link>
             </div>
+            </ScrollReveal>
 
             {/* Pro */}
+            <ScrollReveal delay={150}>
             <div className="bg-violet-600 rounded-2xl p-8 relative overflow-hidden shadow-lg shadow-violet-200">
               <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500 rounded-full blur-2xl opacity-40 -translate-y-8 translate-x-8" />
               <div className="relative">
@@ -387,6 +358,7 @@ export default function Home() {
                 <p className="text-center text-violet-300 text-xs mt-3">Cancel anytime.</p>
               </div>
             </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
@@ -403,11 +375,13 @@ export default function Home() {
             </h2>
           </div>
           <dl className="space-y-6">
-            {schemaFaq.mainEntity.map((item) => (
-              <div key={item.name} className="border border-gray-100 rounded-2xl px-6 py-5 bg-gray-50">
-                <dt className="text-base font-semibold text-gray-900 mb-2">{item.name}</dt>
-                <dd className="text-sm text-gray-500 leading-relaxed">{item.acceptedAnswer.text}</dd>
-              </div>
+            {schemaFaq.mainEntity.map((item, i) => (
+              <ScrollReveal key={item.name} delay={i * 70}>
+                <div className="border border-gray-100 rounded-2xl px-6 py-5 bg-gray-50 hover:border-violet-200 hover:bg-violet-50/40 transition-colors duration-200">
+                  <dt className="text-base font-semibold text-gray-900 mb-2">{item.name}</dt>
+                  <dd className="text-sm text-gray-500 leading-relaxed">{item.acceptedAnswer.text}</dd>
+                </div>
+              </ScrollReveal>
             ))}
           </dl>
         </div>

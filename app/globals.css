@@ -25,3 +25,68 @@ body {
     text-wrap: balance;
   }
 }
+
+/* ── Landing page animations ─────────────────────────────────────── */
+
+@keyframes wordIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0);    }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 8px 24px rgba(109, 40, 217, 0.30); }
+  50%      { box-shadow: 0 8px 40px rgba(109, 40, 217, 0.60); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Word cycling in the headline */
+.animate-word-in {
+  animation: wordIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Hero text stagger */
+.animate-fade-up   { animation: fadeUp 0.65s ease 0s    both; }
+.animate-fade-up-1 { animation: fadeUp 0.65s ease 0.08s both; }
+.animate-fade-up-2 { animation: fadeUp 0.65s ease 0.18s both; }
+.animate-fade-up-3 { animation: fadeUp 0.65s ease 0.28s both; }
+.animate-fade-up-4 { animation: fadeUp 0.65s ease 0.38s both; }
+
+/* Floating proposal card */
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* CTA button glow */
+.animate-cta-glow {
+  animation: ctaGlow 2.8s ease-in-out infinite;
+}
+
+/* Typing cursor */
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Fade-in for the "Ready to send" badge */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
