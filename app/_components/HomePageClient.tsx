@@ -143,7 +143,7 @@ export function HomePageClient() {
                   {t.pricing.starter.label}
                 </p>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-bold text-gray-900">$0</span>
+                  <span className="text-4xl font-bold text-gray-900">{t.prices.symbol}{t.prices.free}</span>
                   <span className="text-gray-400">{t.pricing.starter.per}</span>
                 </div>
                 <p className="text-sm text-gray-500 mb-6">{t.pricing.starter.description}</p>
@@ -178,7 +178,7 @@ export function HomePageClient() {
                     </span>
                   </div>
                   <div className="flex items-baseline gap-1 mb-1">
-                    <span className="text-4xl font-bold text-white">$19</span>
+                    <span className="text-4xl font-bold text-white">{t.prices.symbol}{t.prices.proMonthly}</span>
                     <span className="text-violet-200">{t.pricing.pro.per}</span>
                   </div>
                   <p className="text-sm text-violet-200 mb-6">{t.pricing.pro.description}</p>
@@ -208,7 +208,7 @@ export function HomePageClient() {
                   {t.pricing.business.label}
                 </p>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-bold text-white">$39</span>
+                  <span className="text-4xl font-bold text-white">{t.prices.symbol}{t.prices.business}</span>
                   <span className="text-gray-400">{t.pricing.business.per}</span>
                 </div>
                 <p className="text-sm text-gray-400 mb-6">{t.pricing.business.description}</p>

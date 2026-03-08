@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
         price_data: {
           currency: "usd",
           product: process.env.STRIPE_PRO_PRODUCT_ID!,
-          unit_amount: isAnnual ? 14900 : 1900, // $149/yr or $19/mo
+          unit_amount: isAnnual ? 3199 : 399, // $31.99/yr or $3.99/mo
           recurring: { interval: isAnnual ? "year" : "month" },
         },
         quantity: 1,
