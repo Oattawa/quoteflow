@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iron Rails — Transport Empire II</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      font-family: 'Courier New', monospace;
+      color: #e0d8b0;
+    }
+    #header {
+      width: 100%;
+      background: #1a1228;
+      border-bottom: 3px solid #c8a020;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    #header h1 {
+      font-size: 20px;
+      color: #f0c840;
+      text-shadow: 2px 2px #000;
+      letter-spacing: 2px;
+      image-rendering: pixelated;
+    }
+    #header .era { font-size: 14px; color: #a0c8e0; }
+    #ui-bar {
+      width: 800px;
+      display: flex;
+      gap: 8px;
+      padding: 6px 0;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .player-tag {
+      padding: 4px 10px;
+      border: 2px solid;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .player-tag:hover { opacity: 0.8; }
+    #year-display {
+      margin-left: auto;
+      font-size: 14px;
+      color: #f0c840;
+      padding: 4px 12px;
+      border: 2px solid #c8a020;
+    }
+    #canvas-wrap {
+      position: relative;
+      border: 3px solid #c8a020;
+      box-shadow: 0 0 20px #c8a04040;
+    }
+    canvas { display: block; image-rendering: pixelated; cursor: crosshair; }
+    #controls {
+      width: 800px;
+      display: flex;
+      gap: 8px;
+      padding: 6px 0;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 6px 14px;
+      background: #1e1e3a;
+      color: #e0d8b0;
+      border: 2px solid #6060a0;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    button:hover { background: #2e2e5a; border-color: #a0a0d0; }
+    button.active { background: #3a2860; border-color: #f0c840; color: #f0c840; }
+    #status {
+      width: 800px;
+      font-size: 11px;
+      color: #80a080;
+      padding: 2px 0;
+      min-height: 16px;
+    }
+    #legend {
+      width: 800px;
+      display: flex;
+      gap: 16px;
+      padding: 4px 0;
+      font-size: 11px;
+      color: #a09870;
+      flex-wrap: wrap;
+    }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-swatch {
+      width: 14px; height: 14px;
+      border: 1px solid #40404060;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+<div id="header">
+  <h1>&#x1F682; IRON RAILS — TRANSPORT EMPIRE II</h1>
+  <span class="era">16-bit Era Progression · 1850–2000</span>
+</div>
+
+<div id="ui-bar">
+  <div class="player-tag" id="p1tag" style="border-color:#e04040;color:#e04040;">&#9632; P1: Red Rail Co.</div>
+  <div class="player-tag" id="p2tag" style="border-color:#40a0e0;color:#40a0e0;">&#9632; P2: Blue Express</div>
+  <div class="player-tag" id="p3tag" style="border-color:#40c060;color:#40c060;">&#9632; P3: Green Lines</div>
+  <div class="player-tag" id="p4tag" style="border-color:#e0c040;color:#e0c040;">&#9632; P4: Gold Transit</div>
+  <div id="year-display">YEAR: <span id="year-val">1850</span></div>
+</div>
+
+<div id="canvas-wrap">
+  <canvas id="gameCanvas" width="800" height="520"></canvas>
+</div>
+
+<div id="controls">
+  <button id="btn-rail" class="active" onclick="setTool('rail')">&#x1F6E4; Lay Track</button>
+  <button id="btn-station" onclick="setTool('station')">&#x1F3E0; Build Station</button>
+  <button id="btn-train" onclick="setTool('train')">&#x1F682; Place Train</button>
+  <button id="btn-erase" onclick="setTool('erase')">&#x2702; Erase</button>
+  <button onclick="advanceYear()">&#x23E9; Advance Year (+10)</button>
+  <button onclick="nextPlayer()">&#x25B6; Next Player</button>
+  <button onclick="newMap()">&#x1F5FA; New Map</button>
+  <button onclick="toggleGrid()">&#x22EF; Toggle Grid</button>
+</div>
+
+<div id="status">Click on the map to place rails, stations, or trains.</div>
+
+<div id="legend">
+  <div class="legend-item"><div class="legend-swatch" style="background:#3a6e2a;"></div>Forest</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#5a8a3a;"></div>Plains</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#8a7850;"></div>Mountains</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#2060b0;"></div>Water</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#c8c060;"></div>Desert</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#808080;"></div>&#x1F6E4; Rail Track</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#a06020;"></div>&#x1F3E0; Station</div>
+</div>
+
+<script>
+// ── Constants ────────────────────────────────────────────────────────────────
+const COLS = 50, ROWS = 32, TILE = 16;
+const TERRAIN = { PLAINS:0, FOREST:1, MOUNTAIN:2, WATER:3, DESERT:4 };
+const TERRAIN_COLORS = ['#5a8a3a','#3a6e2a','#8a7850','#2060b0','#c8c060'];
+const TERRAIN_DARK   = ['#4a7a2a','#2a5e1a','#7a6840','#1050a0','#b8b050'];
+
+const PLAYER_COLORS = ['#e04040','#40a0e0','#40c060','#e0c040'];
+const PLAYER_NAMES  = ['Red Rail Co.','Blue Express','Green Lines','Gold Transit'];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let map = [], overlay = [], trains = [];
+let currentPlayer = 0, year = 1850, showGrid = true;
+let tool = 'rail';
+let scores = [0,0,0,0];
+let hoveredCell = null;
+
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// ── Map Generation ───────────────────────────────────────────────────────────
+function newMap() {
+  map = [];
+  overlay = [];
+  trains = [];
+  scores = [0,0,0,0];
+  year = 1850;
+  document.getElementById('year-val').textContent = year;
+
+  // Simple noise-like terrain
+  for (let r = 0; r < ROWS; r++) {
+    map[r] = [];
+    overlay[r] = [];
+    for (let c = 0; c < COLS; c++) {
+      overlay[r][c] = null;
+      const n = Math.random();
+      const edgeFactor = Math.min(c, COLS-1-c, r, ROWS-1-r) / 5;
+      if (edgeFactor < 0.5 && Math.random() < 0.35) {
+        map[r][c] = TERRAIN.WATER;
+      } else if (n < 0.28) map[r][c] = TERRAIN.FOREST;
+      else if (n < 0.55) map[r][c] = TERRAIN.PLAINS;
+      else if (n < 0.68) map[r][c] = TERRAIN.MOUNTAIN;
+      else if (n < 0.80) map[r][c] = TERRAIN.DESERT;
+      else map[r][c] = TERRAIN.PLAINS;
+    }
+  }
+  // Smooth pass
+  for (let pass = 0; pass < 2; pass++) {
+    for (let r = 1; r < ROWS-1; r++) {
+      for (let c = 1; c < COLS-1; c++) {
+        if (map[r][c] === TERRAIN.WATER) continue;
+        const neighbors = [map[r-1][c],map[r+1][c],map[r][c-1],map[r][c+1]];
+        const counts = [0,0,0,0,0];
+        neighbors.forEach(t => counts[t]++);
+        const maxTerrain = counts.indexOf(Math.max(...counts));
+        if (counts[maxTerrain] >= 3) map[r][c] = maxTerrain;
+      }
+    }
+  }
+  render();
+  setStatus('New map generated! Player 1 (Red Rail Co.) starts.');
+}
+
+// ── Rendering ────────────────────────────────────────────────────────────────
+function render() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Terrain
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const t = map[r][c];
+      const isHov = hoveredCell && hoveredCell.r === r && hoveredCell.c === c;
+      ctx.fillStyle = isHov ? TERRAIN_DARK[t] : TERRAIN_COLORS[t];
+      ctx.fillRect(c*TILE, r*TILE, TILE, TILE);
+    }
+  }
+  // Grid
+  if (showGrid) {
+    ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+    ctx.lineWidth = 0.5;
+    for (let r = 0; r <= ROWS; r++) {
+      ctx.beginPath(); ctx.moveTo(0, r*TILE); ctx.lineTo(COLS*TILE, r*TILE); ctx.stroke();
+    }
+    for (let c = 0; c <= COLS; c++) {
+      ctx.beginPath(); ctx.moveTo(c*TILE, 0); ctx.lineTo(c*TILE, ROWS*TILE); ctx.stroke();
+    }
+  }
+  // Overlay (rails, stations)
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const ov = overlay[r][c];
+      if (!ov) continue;
+      const x = c*TILE, y = r*TILE;
+      if (ov.type === 'rail') {
+        drawRail(x, y, ov.player);
+      } else if (ov.type === 'station') {
+        drawStation(x, y, ov.player);
+      }
+    }
+  }
+  // Trains
+  trains.forEach(tr => drawTrain(tr));
+  // Score HUD
+  drawHUD();
+}
+
+function drawRail(x, y, p) {
+  ctx.fillStyle = '#606060';
+  ctx.fillRect(x+1, y+7, TILE-2, 2);   // horizontal sleeper
+  ctx.fillStyle = PLAYER_COLORS[p];
+  ctx.fillRect(x+2, y+6, 3, 4);
+  ctx.fillRect(x+TILE-5, y+6, 3, 4);
+  ctx.fillRect(x+6, y+6, 3, 4);
+  ctx.fillRect(x+TILE-9, y+6, 3, 4);
+}
+
+function drawStation(x, y, p) {
+  ctx.fillStyle = '#a06020';
+  ctx.fillRect(x+2, y+4, TILE-4, TILE-6);
+  ctx.fillStyle = PLAYER_COLORS[p];
+  ctx.fillRect(x+2, y+4, TILE-4, 3);
+  // Chimney
+  ctx.fillStyle = '#404040';
+  ctx.fillRect(x+TILE-6, y+1, 3, 5);
+}
+
+function drawTrain(tr) {
+  const x = tr.c*TILE, y = tr.r*TILE;
+  // Body
+  ctx.fillStyle = PLAYER_COLORS[tr.player];
+  ctx.fillRect(x+1, y+5, TILE-2, 6);
+  // Cab
+  ctx.fillStyle = '#202020';
+  ctx.fillRect(x+TILE-6, y+4, 5, 7);
+  // Wheels
+  ctx.fillStyle = '#101010';
+  ctx.fillRect(x+2, y+10, 4, 3);
+  ctx.fillRect(x+TILE-6, y+10, 4, 3);
+  // Smokestack
+  ctx.fillStyle = '#404040';
+  ctx.fillRect(x+2, y+2, 2, 4);
+  // Steam puff
+  if ((Date.now()/400 | 0) % 2 === 0) {
+    ctx.fillStyle = 'rgba(220,220,220,0.6)';
+    ctx.fillRect(x+1, y, 4, 3);
+  }
+}
+
+function drawHUD() {
+  const hw = 192, hh = 80;
+  const hx = canvas.width - hw - 4, hy = 4;
+  ctx.fillStyle = 'rgba(10,10,26,0.82)';
+  ctx.fillRect(hx, hy, hw, hh);
+  ctx.strokeStyle = '#c8a020';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(hx, hy, hw, hh);
+  ctx.font = 'bold 10px Courier New';
+  ctx.fillStyle = '#f0c840';
+  ctx.fillText('SCORES', hx+8, hy+14);
+  for (let i = 0; i < 4; i++) {
+    const isActive = i === currentPlayer;
+    ctx.fillStyle = isActive ? PLAYER_COLORS[i] : 'rgba(200,200,180,0.55)';
+    ctx.fillRect(hx+6, hy+18+i*14, 8, 8);
+    ctx.fillStyle = isActive ? '#fff' : '#a09870';
+    ctx.font = (isActive ? 'bold ' : '') + '9px Courier New';
+    ctx.fillText(PLAYER_NAMES[i].substring(0,14) + ': ' + scores[i] + ' pts', hx+18, hy+26+i*14);
+  }
+}
+
+// ── Interaction ──────────────────────────────────────────────────────────────
+function cellAt(evt) {
+  const rect = canvas.getBoundingClientRect();
+  const sx = canvas.width / rect.width, sy = canvas.height / rect.height;
+  const mx = (evt.clientX - rect.left) * sx;
+  const my = (evt.clientY - rect.top)  * sy;
+  return { c: Math.floor(mx / TILE), r: Math.floor(my / TILE) };
+}
+
+canvas.addEventListener('mousemove', evt => {
+  const { c, r } = cellAt(evt);
+  if (c >= 0 && c < COLS && r >= 0 && r < ROWS) {
+    hoveredCell = { c, r };
+    const t = map[r][c];
+    const terrainNames = ['Plains','Forest','Mountain','Water','Desert'];
+    const ov = overlay[r][c];
+    setStatus(`[${c},${r}] ${terrainNames[t]}${ov ? ' · ' + ov.type + ' (P'+(ov.player+1)+')' : ''} — Tool: ${tool} — Player: ${PLAYER_NAMES[currentPlayer]}`);
+  } else {
+    hoveredCell = null;
+  }
+  render();
+});
+
+canvas.addEventListener('mouseleave', () => { hoveredCell = null; render(); });
+
+canvas.addEventListener('click', evt => {
+  const { c, r } = cellAt(evt);
+  if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return;
+
+  if (tool === 'erase') {
+    overlay[r][c] = null;
+    trains = trains.filter(t => !(t.r === r && t.c === c));
+    setStatus(`Erased cell [${c},${r}].`);
+    render(); return;
+  }
+  if (map[r][c] === TERRAIN.WATER && tool !== 'erase') {
+    setStatus('Cannot build on water!'); return;
+  }
+  if (tool === 'rail') {
+    overlay[r][c] = { type: 'rail', player: currentPlayer };
+    scores[currentPlayer] += 1;
+    setStatus(`Rail laid at [${c},${r}] for ${PLAYER_NAMES[currentPlayer]}. +1 pt`);
+  } else if (tool === 'station') {
+    overlay[r][c] = { type: 'station', player: currentPlayer };
+    scores[currentPlayer] += 5;
+    setStatus(`Station built at [${c},${r}] for ${PLAYER_NAMES[currentPlayer]}. +5 pts`);
+  } else if (tool === 'train') {
+    if (overlay[r][c] && overlay[r][c].type === 'rail') {
+      trains.push({ r, c, player: currentPlayer });
+      scores[currentPlayer] += 10;
+      setStatus(`Train placed at [${c},${r}] for ${PLAYER_NAMES[currentPlayer]}. +10 pts`);
+    } else {
+      setStatus('Trains can only be placed on rail tracks!');
+    }
+  }
+  updatePlayerUI();
+  render();
+});
+
+// ── Controls ─────────────────────────────────────────────────────────────────
+function setTool(t) {
+  tool = t;
+  ['rail','station','train','erase'].forEach(id => {
+    document.getElementById('btn-'+id).classList.toggle('active', id === t);
+  });
+  setStatus('Tool: ' + t);
+}
+
+function advanceYear() {
+  year = Math.min(2000, year + 10);
+  document.getElementById('year-val').textContent = year;
+  const era = year < 1880 ? 'Steam Age' : year < 1920 ? 'Golden Age of Rail' : year < 1960 ? 'Diesel Era' : year < 1980 ? 'Electric Age' : 'Modern Rail';
+  setStatus(`Year advanced to ${year} — ${era}`);
+  // Animate trains
+  trains.forEach(tr => {
+    tr.c = (tr.c + 1 + COLS) % COLS;
+  });
+  render();
+}
+
+function nextPlayer() {
+  currentPlayer = (currentPlayer + 1) % 4;
+  updatePlayerUI();
+  setStatus(`Now playing: ${PLAYER_NAMES[currentPlayer]}`);
+  render();
+}
+
+function toggleGrid() {
+  showGrid = !showGrid;
+  render();
+}
+
+function updatePlayerUI() {
+  for (let i = 0; i < 4; i++) {
+    const el = document.getElementById('p'+(i+1)+'tag');
+    el.style.opacity = i === currentPlayer ? '1' : '0.45';
+    el.style.fontWeight = i === currentPlayer ? 'bold' : 'normal';
+  }
+}
+
+function setStatus(msg) {
+  document.getElementById('status').textContent = msg;
+}
+
+// ── Train Animation ──────────────────────────────────────────────────────────
+setInterval(() => {
+  if (trains.length > 0) render();
+}, 400);
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+newMap();
+updatePlayerUI();
+</script>
+</body>
+</html>
