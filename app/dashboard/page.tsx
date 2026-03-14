@@ -4,6 +4,7 @@ import {
   getUserPlan,
   getProposalCountThisMonth,
   getProposals,
+  getTotalProposalCount,
   FREE_TIER_LIMIT,
 } from "@/lib/supabase/proposals";
 import { DashboardClient } from "./_components/DashboardClient";
@@ -15,10 +16,11 @@ export default async function DashboardPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const [plan, usedThisMonth, recentProposals] = await Promise.all([
+  const [plan, usedThisMonth, recentProposals, totalProposals] = await Promise.all([
     getUserPlan(supabase, user.id),
     getProposalCountThisMonth(supabase, user.id),
     getProposals(supabase, user.id, 5),
+    getTotalProposalCount(supabase, user.id),
   ]);
 
   const isPro = plan === "pro";
@@ -31,6 +33,7 @@ export default async function DashboardPage() {
       usedThisMonth={usedThisMonth}
       remaining={remaining}
       recentProposals={recentProposals}
+      totalProposals={totalProposals}
       freeTierLimit={FREE_TIER_LIMIT}
     />
   );

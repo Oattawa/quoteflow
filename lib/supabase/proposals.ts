@@ -94,8 +94,37 @@ export async function getProposals(
     .order("created_at", { ascending: false })
     .limit(limit);
 
-  if (error) throw new Error("Failed to fetch proposals.");
-  return (data ?? []) as ProposalSummary[];
+  if (!error) return (data ?? []) as ProposalSummary[];
+
+  // Fallback: status columns may not exist yet (migration not applied).
+  // Return proposals without status rather than crashing the page.
+  const { data: fallback, error: fallbackError } = await supabase
+    .from("proposals")
+    .select("id, client_name, project_type, budget_range, created_at")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (fallbackError) throw new Error("Failed to fetch proposals.");
+
+  return (fallback ?? []).map((p) => ({
+    ...p,
+    status: "pending" as ProposalStatus,
+    viewed_at: null,
+    accepted_at: null,
+  }));
+}
+
+export async function getTotalProposalCount(
+  supabase: SupabaseClient,
+  userId: string
+): Promise<number> {
+  const { count } = await supabase
+    .from("proposals")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId);
+
+  return count ?? 0;
 }
 
 export async function getProposal(
