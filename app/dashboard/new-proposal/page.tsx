@@ -30,6 +30,8 @@ export default function NewProposalPage() {
   const searchParams = useSearchParams();
   const upgraded = searchParams.get("upgraded") === "true";
 
+  const regenerateId = searchParams.get("regenerate");
+
   const [form, setForm] = useState<ProposalFormData>(initialForm);
   const [loading, setLoading] = useState(false);
   const [proposal, setProposal] = useState<string | null>(null);
@@ -37,6 +39,27 @@ export default function NewProposalPage() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [planInfo, setPlanInfo] = useState<PlanInfo | null>(null);
+
+  // Pre-fill form when coming from the detail page "Regenerate" button
+  useEffect(() => {
+    if (!regenerateId) return;
+    fetch(`/api/proposals/${regenerateId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.id) return;
+        setForm((prev) => ({
+          ...prev,
+          clientName: data.client_name ?? "",
+          projectType: data.project_type ?? "",
+          projectScope: data.scope ?? "",
+          timeline: data.timeline ?? "",
+          budgetRange: data.budget_range ?? "",
+        }));
+        setProposalId(data.id);
+        setProposal(data.proposal_content);
+      })
+      .catch(() => {});
+  }, [regenerateId]);
 
   useEffect(() => {
     fetch("/api/user/plan")

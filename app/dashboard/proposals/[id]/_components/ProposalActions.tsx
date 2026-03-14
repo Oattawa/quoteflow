@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Copy, Check, Printer, Zap, Share2, Trash2 } from "lucide-react";
+import { Copy, Check, Printer, Zap, Share2, Trash2, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export default function ProposalActions({
@@ -18,6 +18,7 @@ export default function ProposalActions({
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   async function handleCopy() {
     await navigator.clipboard.writeText(proposal);
@@ -35,19 +36,28 @@ export default function ProposalActions({
   async function handleDelete() {
     if (!confirm("Delete this proposal? This cannot be undone.")) return;
     setDeleting(true);
+    setDeleteError(null);
     try {
       const res = await fetch(`/api/proposals/${proposalId}`, { method: "DELETE" });
       if (res.ok) {
         router.push("/dashboard/proposals");
         router.refresh();
+      } else {
+        setDeleteError("Failed to delete. Please try again.");
+        setDeleting(false);
       }
-    } finally {
+    } catch {
+      setDeleteError("Network error. Please try again.");
       setDeleting(false);
     }
   }
 
   return (
-    <div className="flex items-center gap-2 flex-wrap print:hidden">
+    <div className="flex flex-col items-end gap-2 print:hidden">
+      {deleteError && (
+        <p className="text-xs text-red-500">{deleteError}</p>
+      )}
+    <div className="flex items-center gap-2 flex-wrap">
       {/* Copy text */}
       <button
         onClick={handleCopy}
@@ -97,8 +107,13 @@ export default function ProposalActions({
         disabled={deleting}
         className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 px-3 py-2 rounded-xl transition-colors disabled:opacity-50"
       >
-        <Trash2 className="w-4 h-4" />
+        {deleting ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          <Trash2 className="w-4 h-4" />
+        )}
       </button>
+    </div>
     </div>
   );
 }
