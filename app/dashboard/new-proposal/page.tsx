@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ProposalForm } from "./_components/ProposalForm";
 import { ProposalOutput } from "./_components/ProposalOutput";
@@ -25,7 +25,7 @@ interface PlanInfo {
   limit: number | null;
 }
 
-export default function NewProposalPage() {
+function NewProposalContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const upgraded = searchParams.get("upgraded") === "true";
@@ -189,5 +189,15 @@ export default function NewProposalPage() {
         onRegenerate={() => generate(true)}
       />
     </main>
+  );
+}
+
+// useSearchParams() requires a Suspense boundary in Next.js App Router —
+// without it the server throws during rendering.
+export default function NewProposalPage() {
+  return (
+    <Suspense>
+      <NewProposalContent />
+    </Suspense>
   );
 }
