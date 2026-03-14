@@ -57,63 +57,63 @@ export default function ProposalActions({
       {deleteError && (
         <p className="text-xs text-red-500">{deleteError}</p>
       )}
-    <div className="flex items-center gap-2 flex-wrap">
-      {/* Copy text */}
-      <button
-        onClick={handleCopy}
-        className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl transition-colors"
-      >
-        {copied ? (
-          <><Check className="w-4 h-4 text-green-500" />Copied!</>
-        ) : (
-          <><Copy className="w-4 h-4" />Copy</>
-        )}
-      </button>
-
-      {/* Share link */}
-      <button
-        onClick={handleShareLink}
-        className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl transition-colors"
-      >
-        {linkCopied ? (
-          <><Check className="w-4 h-4 text-green-500" />Link copied!</>
-        ) : (
-          <><Share2 className="w-4 h-4" />Share link</>
-        )}
-      </button>
-
-      {/* PDF */}
-      {isPro ? (
+      <div className="flex items-center gap-2 flex-wrap">
+        {/* Copy text */}
         <button
-          onClick={() => window.print()}
-          className="inline-flex items-center gap-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl transition-colors"
+          onClick={handleCopy}
+          className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl transition-colors"
         >
-          <Printer className="w-4 h-4" />
-          Download PDF
+          {copied ? (
+            <><Check className="w-4 h-4 text-green-500" />Copied!</>
+          ) : (
+            <><Copy className="w-4 h-4" />Copy</>
+          )}
         </button>
-      ) : (
-        <Link
-          href="/dashboard/upgrade"
-          className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-violet-200 text-violet-600 hover:bg-violet-50 px-4 py-2 rounded-xl transition-colors"
-        >
-          <Zap className="w-4 h-4" />
-          PDF (Pro)
-        </Link>
-      )}
 
-      {/* Delete */}
-      <button
-        onClick={handleDelete}
-        disabled={deleting}
-        className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 px-3 py-2 rounded-xl transition-colors disabled:opacity-50"
-      >
-        {deleting ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+        {/* Share link */}
+        <button
+          onClick={handleShareLink}
+          className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-xl transition-colors"
+        >
+          {linkCopied ? (
+            <><Check className="w-4 h-4 text-green-500" />Link copied!</>
+          ) : (
+            <><Share2 className="w-4 h-4" />Share link</>
+          )}
+        </button>
+
+        {/* PDF */}
+        {isPro ? (
+          <button
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl transition-colors"
+          >
+            <Printer className="w-4 h-4" />
+            Download PDF
+          </button>
         ) : (
-          <Trash2 className="w-4 h-4" />
+          <Link
+            href="/dashboard/upgrade"
+            className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-violet-200 text-violet-600 hover:bg-violet-50 px-4 py-2 rounded-xl transition-colors"
+          >
+            <Zap className="w-4 h-4" />
+            PDF (Pro)
+          </Link>
         )}
-      </button>
-    </div>
+
+        {/* Delete */}
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="inline-flex items-center gap-2 text-sm font-medium bg-white border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-200 px-3 py-2 rounded-xl transition-colors disabled:opacity-50"
+        >
+          {deleting ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Trash2 className="w-4 h-4" />
+          )}
+        </button>
+      </div>
     </div>
   );
 }

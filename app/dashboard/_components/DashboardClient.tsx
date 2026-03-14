@@ -18,6 +18,7 @@ type Props = {
   usedThisMonth: number;
   remaining: number | null;
   recentProposals: Proposal[];
+  totalProposals: number;
   freeTierLimit: number;
 };
 
@@ -27,6 +28,7 @@ export function DashboardClient({
   usedThisMonth,
   remaining,
   recentProposals,
+  totalProposals,
   freeTierLimit,
 }: Props) {
   const { t } = useLanguage();
@@ -93,7 +95,7 @@ export function DashboardClient({
           <div className="bg-white rounded-2xl border border-gray-100 px-6 py-5 shadow-sm">
             <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">{d.totalProposals}</p>
             <span className="text-xl font-bold text-gray-900">
-              {recentProposals.length === 5 ? "5+" : recentProposals.length}
+              {totalProposals}
             </span>
             <span className="text-sm text-gray-400 ml-1">{d.saved}</span>
           </div>

@@ -24,6 +24,13 @@ function StatusBadge({ status }: { status: ProposalStatus }) {
       </span>
     );
   }
+  if (status === "declined") {
+    return (
+      <span className="inline-flex items-center gap-1 text-xs font-medium bg-gray-50 text-gray-500 border border-gray-200 px-2 py-0.5 rounded-full">
+        ✕ Declined
+      </span>
+    );
+  }
   return null; // don't show a badge for "pending" — keep list clean
 }
 
@@ -53,9 +60,11 @@ export default async function ProposalsPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">My Proposals</h1>
             <p className="text-sm text-gray-500 mt-0.5">
-              {isPro
-                ? `${proposals.length} proposal${proposals.length !== 1 ? "s" : ""} total`
-                : `Showing ${visibleProposals.length} of ${proposals.length} proposals`}
+              {proposals.length === 0
+                ? "No proposals yet"
+                : hiddenCount > 0
+                ? `Showing ${visibleProposals.length} of ${proposals.length} proposals`
+                : `${proposals.length} proposal${proposals.length !== 1 ? "s" : ""} total`}
             </p>
           </div>
           <Link
@@ -148,8 +157,8 @@ export default async function ProposalsPage() {
           </div>
         )}
 
-        {/* Pro upsell for free users */}
-        {!isPro && (
+        {/* Pro upsell for free users — only when they have proposals to make the value clear */}
+        {!isPro && proposals.length > 0 && (
           <div className="bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl px-6 py-6 text-white shadow-lg shadow-violet-200">
             <div className="flex items-center justify-between">
               <div>
